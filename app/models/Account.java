@@ -17,52 +17,27 @@ import play.db.ebean.Model;
 @Entity
 public class Account extends Model {
 
-	//////////////
-	// Enuns
+    public enum Privilege {
+        One,
+        Two,
+        Three
+    }
 
-	public enum Privilege {
-		Owner, 		// Proprietário
-		Admin, 		// Administrador
-		Viewer 		// Visualizador
-	}
+    @EmbeddedId
+    public AccountPK id;
 
-	//////////////
-	// Structure
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    public User user;
 
-	@EmbeddedId
-	public AccountPK id;
+    @ManyToOne
+    @JoinColumn(name = "company_cnpj", referencedColumnName = "cnpj")
+    public Company company;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	public User user;
+    @Enumerated(EnumType.STRING)
+    @Required
+    public Privilege privilege;
 
-	@ManyToOne
-	@JoinColumn(name = "company_cnpj", referencedColumnName = "cnpj")
-	public Company company;
-
-	@Enumerated(EnumType.STRING)
-	@Required
-	public Privilege privilege;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Required
-	public Date createOn;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date lastResearchOn;
-
-	//////////////
-	// Auxiliar
-
-	@Override
-	public void save() {
-		if (createOn == null) createOn = new Date();
-		super.save();
-	}
-
-	//////////////
-	// Finder
-
-	public static Finder<Long, User> finder = new Finder<>(Long.class, User.class);
+    public static Finder<Long, User> finder = new Finder<>(Long.class, User.class);
 
 }

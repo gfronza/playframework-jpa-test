@@ -6,10 +6,8 @@
 create table account (
   user_id                   bigint,
   company_cnpj              varchar(255),
-  privilege                 varchar(6),
-  create_on                 timestamp,
-  last_research_on          timestamp,
-  constraint ck_account_privilege check (privilege in ('Owner','Admin','Viewer')),
+  privilege                 varchar(5),
+  constraint ck_account_privilege check (privilege in ('One','Two','Three')),
   constraint pk_account primary key (user_id, company_cnpj))
 ;
 
@@ -21,8 +19,6 @@ create table company (
   contact                   varchar(255) not null,
   phone                     varchar(50) not null,
   employers                 integer,
-  size                      varchar(11),
-  constraint ck_company_size check (size in ('Individual','Micro','Small','Medium','MediumLarge','Large')),
   constraint pk_company primary key (cnpj))
 ;
 
@@ -32,10 +28,6 @@ create table user (
   email                     varchar(255) not null,
   password                  varchar(255) not null,
   phone                     varchar(50) not null,
-  profile                   varchar(5),
-  confirmed                 boolean default false not null,
-  recovery_key              varchar(250),
-  constraint ck_user_profile check (profile in ('ADMIN','USER')),
   constraint uq_user_email unique (email),
   constraint pk_user primary key (id))
 ;
